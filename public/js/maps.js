@@ -216,23 +216,34 @@ $(document).ready(function() {
   }
 
   function removeDay() {
-    var $days = $('.day-numbers');
-    console.log($days);
-    // if($days.length>1) {
-    //   var day = getCurrentDay();
+    var $days = $('.day-number');
 
-    //   //only allow removal of day 1 when there are at least 2 days
+    if($days.length>1) {
+      var day = getCurrentDay();
 
-    //   //remove day from array
-    //   itinerary.splice(day-1, 1);
+      //remove day from array
+      itinerary.splice(day-1, 1);
       
+      //remove current day's button
+      $('#' + day).remove();
 
-    //   //remove current day's button
-    //   $('#' + day).remove();
 
-    //   //move .current-day to another day
-    //   //grab all objs after and decrement index
-    // }
+      if($days[day]) {
+        for (var i = day; i < $days.length; i++) {
+          console.log($days[i]);
+          $($days[i]).text(i).attr('id', i);
+        };
+      }
+
+      
+      if(day>1) {
+        var $prevDay = $('#'+(day-1));
+        switchDay($prevDay, day-1);
+      } else {
+        var $nextDay = $('#'+(day));
+        switchDay($nextDay, day);
+      }
+    }
     
     
   }
@@ -249,6 +260,7 @@ $(document).ready(function() {
     });
     markers.push(marker);
     marker.setMap(map);
+    setBounds();
   }
 
   function removeMarker(name) {
@@ -259,6 +271,7 @@ $(document).ready(function() {
     })
 
     marker.setMap(null);
+    setBounds();
   }
 
   function updateMap(dayNumber) {
@@ -279,6 +292,10 @@ $(document).ready(function() {
         addMarker(rest);
       });
     }
+
+    // if(markers.length>2){
+    //   setBounds();
+    // }
   }
 
   function removeAllMarkers() {
@@ -286,6 +303,14 @@ $(document).ready(function() {
       marker.setMap(null);
     })
     markers = [];
+  }
+
+  function setBounds() {
+    var bounds = new google.maps.LatLngBounds();
+    markers.forEach(function (marker){
+      bounds.extend(marker.position);
+    });
+    map.fitBounds(bounds);
   }
 });
 
