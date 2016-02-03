@@ -92,7 +92,6 @@ $(document).ready(function() {
     var $item = $(this).parent();
     var type = $item.parent().parent().attr('id');
     var name = $item.find('span').text();
-    console.log($item);
     $item.remove();
 
     removeItem(type, name);
@@ -100,12 +99,17 @@ $(document).ready(function() {
     removeMarker(name);
   })
 
+// Remove a day
+  $('#delete-day').on('click', function() {
+    removeDay();
+  })
+
 // Add a day
   $('#add-day').on('click', function(){
     var num = $('.day-number').last().text();
     var newNum = Number(num)+1;
 
-    var $newDay = $('<button class="btn btn-circle day-btn day-number">'+newNum+'</button>');
+    var $newDay = $('<button class="btn btn-circle day-btn day-number" id="' + newNum + '">'+newNum+'</button>');
     $newDay.insertBefore(this);
     
     itinerary.push({});
@@ -160,9 +164,7 @@ $(document).ready(function() {
     updateMap(dayNum);
   }
 
-  // function logDayToItinerary() {
-  //  var $plan;
-  // }
+
 
   function setHotel(name) {
     var day = getCurrentDay();
@@ -214,13 +216,25 @@ $(document).ready(function() {
   }
 
   function removeDay() {
-    var day = getCurrentDay();
-    itinerary.splice(day-1, 1);
+    var $days = $('.day-numbers');
+    console.log($days);
+    // if($days.length>1) {
+    //   var day = getCurrentDay();
 
-    //remove current day's button
-    //adjust remaining days 
-    //move .current-day to another day
-    //only allow removal of day 1 when there are at least 2 days
+    //   //only allow removal of day 1 when there are at least 2 days
+
+    //   //remove day from array
+    //   itinerary.splice(day-1, 1);
+      
+
+    //   //remove current day's button
+    //   $('#' + day).remove();
+
+    //   //move .current-day to another day
+    //   //grab all objs after and decrement index
+    // }
+    
+    
   }
 
   function getCurrentDay() {
@@ -235,7 +249,6 @@ $(document).ready(function() {
     });
     markers.push(marker);
     marker.setMap(map);
-    console.log(marker);
   }
 
   function removeMarker(name) {
